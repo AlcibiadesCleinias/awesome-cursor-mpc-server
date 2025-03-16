@@ -20,7 +20,7 @@ Use git diffs to trigger code reviews.
 
 ### 1. Environment Setup
 
-You can configure the server using environment variables or by creating a file at `src/env/keys.ts` (legacy method):
+You can configure the server using environment variables or by creating a file at `src/env/keys.ts` (legacy method, deprecated):
 
 ```typescript
 export const OPENAI_API_KEY = "your_key_here";
