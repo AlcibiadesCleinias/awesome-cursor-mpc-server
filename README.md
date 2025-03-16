@@ -20,11 +20,10 @@ Use git diffs to trigger code reviews.
 
 ### 1. Environment Setup
 
-First, you'll need to set up your environment variables. Create a file at `src/env/keys.ts`:
+You can configure the server using environment variables or by creating a file at `src/env/keys.ts` (legacy method):
 
 ```typescript
 export const OPENAI_API_KEY = "your_key_here";
-// Add any other keys you need
 ```
 
 > ⚠️ **Security Note**: Storing API keys directly in source code is not recommended for production environments. This is only for local development and learning purposes. You can set the env var inline in the Cursor MCP interface as well.
@@ -50,10 +49,23 @@ This project is designed to be used as an MCP server in Cursor. Here's how to se
 1. Open Cursor
 2. Go to `Cursor Settings > Features > MCP`
 3. Click `+ Add New MCP Server`
-4. Fill out the form:
-   - **Name**: AI Development Assistant
-   - **Type**: stdio
-   - **Command**: `node /path/to/your/project/dist/index.js`
+4. Fill out the `mcp.json`:
+```json
+{
+    "mcpServers": {
+      "ai-development-assistant": {
+        "command": "node",
+        "args": ["/path/to/your/project/build/awesome-cursor-mpc-server/build/index.js"],
+        "env": {
+          "OPENAI_API_KEY": "get your key from https://platform.openai.com/api-keys",
+          "OPENAI_BASE_URL": "optional to use Perplexity e.g.",
+          "OPENAI_MODEL": "optional <...>",
+          "CODE_REVIEW_TARGET_BRANCH_NAME": "optional <...>" 
+        }
+      }
+    }
+}
+```
 
 > 📘 **Pro Tip**: You might need to use the full path to your project's built index.js file.
 
@@ -75,6 +87,8 @@ The agent will ask for your approval before making any tool calls.
 
 > 📘 **Pro Tip**: You can update your .cursorrules file with instructions on how to use the tools for certain scenarios, and the agent will use the tools automatically.
 
+> 📘 **Pro Tip**: To make sure server is used for e.g. "Review this code for best practices" you could add smth like "use review tool"
+
 ## 📁 Project Structure
 
 ```
@@ -83,8 +97,9 @@ src/
 │   ├── architect.ts    # Code structure generator
 │   ├── screenshot.ts   # Screenshot analysis tool
 │   └── codeReview.ts   # Code review tool
-├── env/
-│   └── keys.ts         # Environment configuration (add your API keys here!)
+├── env/                # Deprecated! Legacy, add env to mcp.json instead
+│   └── keys.ts         # Deprecated! Legacy, add env to mcp.json instead
+├── settings.ts        # Environment variables and server configuration
 └── index.ts           # Main entry point
 ```
 
