@@ -14,19 +14,24 @@ Take UI design screenshots and use them with the composer agent.
 
 ### 🔍 Code Review
 
-Use git diffs to trigger code reviews.
+Use git diffs to trigger code reviews against configurable target branches.
 
 ## 🚀 Getting Started
 
 ### 1. Environment Setup
 
-You can configure the server using environment variables or by creating a file at `src/env/keys.ts` (legacy method, deprecated):
+Configure the server using environment variables in your `mcp.json` (cursor will suggest to create this file according to "Adding to Cursor below"):
 
-```typescript
-export const OPENAI_API_KEY = "your_key_here";
-```
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `OPENAI_API_KEY` | Yes | - | Your OpenAI API key |
+| `OPENAI_BASE_URL` | No | OpenAI default | Custom API endpoint (e.g., for Perplexity) |
+| `OPENAI_MODEL` | No | `o3-mini-2025-01-31` | LLM model to use |
+| `CODE_REVIEW_TARGET_BRANCH_NAME` | No | `main` | Target branch for code reviews |
 
-> ⚠️ **Security Note**: Storing API keys directly in source code is not recommended for production environments. This is only for local development and learning purposes. You can set the env var inline in the Cursor MCP interface as well.
+> ⚠️ **Security Note**: Never commit API keys to source control. Always use environment variables for sensitive data.
+
+> ⚠️ **Security Note**: Project consists of backward compatible solution with configuring secretes via [env/keys.ts](env/keys.ts), but it does not recommended.
 
 ### 2. Installation
 
