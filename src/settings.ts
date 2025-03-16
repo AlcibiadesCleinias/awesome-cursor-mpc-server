@@ -1,5 +1,22 @@
 // Get settings for the MCP server from environment variables, or use defaults.
 import { z } from 'zod';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Try to load legacy API key from ../env/keys.ts if it exists (for backwards compatibility)
+//  This behaviour is deprecated and will be removed in a future version.
+const loadLegacyApiKey = async (): Promise<string | undefined> => {
+  try {
+    const legacyKeysPath = path.join(__dirname, '..', 'env', 'keys.ts');
+    if (fs.existsSync(legacyKeysPath)) {
+      const keys = await import(legacyKeysPath);
+      return keys.OPENAI_API_KEY;
+    }
+  } catch (error) {
+    console.warn('[loadLegacyApiKey] Failed to load legacy API key:', error);
+  }
+  return undefined;
+};
 
 // Environment variables schema.
 const envSchema = z.object({
@@ -13,8 +30,13 @@ const envSchema = z.object({
 export type Env = z.infer<typeof envSchema>;
 
 // Validate environment variables.
-const validateEnv = () => {
+const validateEnv = async () => {
   try {
+    const legacyKey = await loadLegacyApiKey();
+    // Use legacy key if environment variable is not set
+    if (!process.env.OPENAI_API_KEY && legacyKey) {
+      process.env.OPENAI_API_KEY = legacyKey;
+    }
     return envSchema.parse(process.env);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -26,7 +48,7 @@ const validateEnv = () => {
 };
 
 // Export validated environment variables.
-export const env = validateEnv();
+export const env = await validateEnv();
 
 // Export individual settings for convenience.
 export const settings = {
