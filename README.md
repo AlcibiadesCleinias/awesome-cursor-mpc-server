@@ -87,7 +87,7 @@ The agent will ask for your approval before making any tool calls.
 
 > 📘 **Pro Tip**: You can update your .cursorrules file with instructions on how to use the tools for certain scenarios, and the agent will use the tools automatically.
 
-> 📘 **Pro Tip**: To make sure server is used for e.g. "Review this code for best practices" you could add smth like "use review tool"
+> 📘 **Pro Tip**: To make sure server is used for e.g. "Review this code for best practices" you could add smth like "use code review tool"
 
 ## 📁 Project Structure
 
