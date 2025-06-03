@@ -23,8 +23,9 @@ export async function runCodeReviewTool(
 
   let diffOutput = "";
   try {
-    diffOutput = execSync(`git -C "${folderPath}" diff ${settings.CODE_REVIEW_TARGET_BRANCH_NAME}`, {
+    diffOutput = execSync(`git -C "${folderPath}" diff ${settings.CODE_REVIEW_TARGET_BRANCH_NAME}...HEAD`, {
       encoding: "utf-8",
+      maxBuffer: 1024 * 1024 * 10,
     });
   } catch (error) {
     // If there's an error (e.g., no git repo, or the file doesn't exist), include it in the response.
